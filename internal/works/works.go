@@ -2,9 +2,10 @@ package works
 
 import (
 	"encoding/json"
-	"github.com/antchfx/htmlquery"
 	"strconv"
 	"strings"
+
+	"github.com/antchfx/htmlquery"
 )
 
 type Work struct {
@@ -57,7 +58,7 @@ func (work *Work) GetAbstract(path string) (err error) {
 		labels = append(labels, htmlquery.InnerText(item))
 	}
 
-	star_i, err := strconv.Atoi(htmlquery.InnerText(star))
+	starI, err := strconv.Atoi(htmlquery.InnerText(star))
 	if err != nil {
 		return
 	}
@@ -68,7 +69,7 @@ func (work *Work) GetAbstract(path string) (err error) {
 		Author:        htmlquery.InnerText(author),
 		Genre:         htmlquery.InnerText(genre),
 		PublishedDate: htmlquery.InnerText(date),
-		Star:          star_i,
+		Star:          starI,
 	}
 
 	w = Work{
