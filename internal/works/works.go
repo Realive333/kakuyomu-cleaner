@@ -58,7 +58,9 @@ func (work *Work) GetAbstract(path string) (err error) {
 		labels = append(labels, htmlquery.InnerText(item))
 	}
 
-	starI, err := strconv.Atoi(htmlquery.InnerText(star))
+	starS := htmlquery.InnerText(star)
+	starS = strings.Replace(starS, ",", "", -1)
+	starI, err := strconv.Atoi(starS)
 	if err != nil {
 		return
 	}

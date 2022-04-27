@@ -5,8 +5,11 @@
 *.so
 *.dylib
 *.jsonl
-./works
-./build
+*.html
+*.json
+works/
+build/
+test/cleaned/
 # Test binary, built with `go test -c`
 *.test
 
