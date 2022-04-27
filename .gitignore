@@ -10,6 +10,7 @@
 works/
 build/
 test/cleaned/
+build/cleaned/
 # Test binary, built with `go test -c`
 *.test
 
