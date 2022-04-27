@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/schollz/progressbar/v3"
 
@@ -37,20 +38,22 @@ func Folder(dir string) (err error) {
 
 	bar := progressbar.Default(int64(len(folders)))
 	for _, folder := range folders {
+		//fmt.Println("Cleaning %s", folder.Name())
 		work, err := file.ReadAllHTML(filepath.Join(dir, folder.Name()))
 		if err != nil {
-			return err
+			return fmt.Errorf("ReadAllHTML in %s error: %v", folder.Name(), err)
 		}
 		result, err := work.ToJson()
 		if err != nil {
-			return err
+			return fmt.Errorf("ToJson in %s error: %v", folder.Name(), err)
 		}
 
 		err = file.AppendJSON(path, result)
 		if err != nil {
-			return err
+			return fmt.Errorf("AppendJSON in %s error: %v", folder.Name(), err)
 		}
 		bar.Add(1)
+		time.Sleep(5 * time.Millisecond)
 	}
 	return
 }
