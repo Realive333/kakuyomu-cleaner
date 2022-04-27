@@ -2,6 +2,7 @@ package works
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -47,10 +48,25 @@ func (work *Work) GetAbstract(path string) (err error) {
 	id := ids[len(ids)-2]
 
 	title := htmlquery.FindOne(doc, "//h4[@class='heading-level5']/a/text()")
+	if title == nil {
+		return fmt.Errorf("title did not exist")
+	}
 	author := htmlquery.FindOne(doc, "//span[@id='author-information-activityName']/a/text()")
-	genre := htmlquery.FindOne(doc, "//dd[@itemprop='genre']/a/text()")
+	if author == nil {
+		return fmt.Errorf("author did not exist")
+	}
+	genre := htmlquery.FindOne(doc, "//li[@id='workGenre']/a/text()")
+	if genre == nil {
+		return fmt.Errorf("genre did not exist")
+	}
 	date := htmlquery.FindOne(doc, "//time[@itemprop='datePublished']")
+	if date == nil {
+		return fmt.Errorf("date did not exist")
+	}
 	star := htmlquery.FindOne(doc, "//span[@class='js-total-review-point-element']/text()")
+	if star == nil {
+		return fmt.Errorf("star did not exist")
+	}
 	tags := htmlquery.Find(doc, "//span[@itemprop='keywords']/a/text()")
 
 	var labels []string
