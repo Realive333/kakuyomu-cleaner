@@ -26,7 +26,7 @@ type Metadata struct {
 
 type Content struct {
 	Id    string `json:"id"`
-	Title string `json:"id"`
+	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
@@ -101,7 +101,7 @@ func (work *Work) GetAbstract(path string) (err error) {
 	return
 }
 
-func (work *Work) GetContent(path string) (err error) {
+func (work *Work) GetContent(path string, flag int) (err error) {
 	doc, err := htmlquery.LoadDoc(path)
 	if err != nil {
 		return
@@ -117,14 +117,35 @@ func (work *Work) GetContent(path string) (err error) {
 	for _, item := range b {
 		bodies = append(bodies, htmlquery.InnerText(item))
 	}
+	strBody := strings.Join(bodies, "")
+
+	if flag > 1 && len(strBody) > flag {
+		strBody = TruncateString(strBody, flag)
+	}
 	content := Content{
 		Id:    strings.Split(id, `.`)[0],
 		Title: htmlquery.InnerText(title),
-		Body:  strings.Join(bodies, " "),
+		Body:  strBody,
 	}
 
 	w := *work
 	w.Contents = append(w.Contents, content)
 	*work = w
 	return
+}
+
+func TruncateString(str string, length int) string {
+	if length <= 0 {
+		return ""
+	}
+	truncated := ""
+	count := 0
+	for _, char := range str {
+		truncated += string(char)
+		count++
+		if count >= length {
+			break
+		}
+	}
+	return truncated
 }

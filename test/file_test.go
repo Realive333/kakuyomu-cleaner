@@ -7,7 +7,7 @@ import (
 )
 
 func Test_ReadAllHTML(t *testing.T) {
-	_, err := file.ReadAllHTML(`..\works\1177354055006319022`)
+	_, err := file.ReadAllHTML(`..\works\1177354055006319022`, -1)
 	if err != nil {
 		t.Errorf("ReadAllHTML error: %v", err)
 	}

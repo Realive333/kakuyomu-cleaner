@@ -14,7 +14,7 @@ import (
 	"github.com/Realive333/kakuyomu_cleaner/pkg/file"
 )
 
-func Folder(dir string) (err error) {
+func Folder(dir string, flag int) (err error) {
 	folders, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return
@@ -22,10 +22,10 @@ func Folder(dir string) (err error) {
 
 	rdirs := strings.Split(dir, `\`)
 	dpath := fmt.Sprintf("./cleaned/%s", rdirs[len(rdirs)-1])
-	path := fmt.Sprintf(`%s\file_test.jsonl`, dpath)
-
+	path := fmt.Sprintf(`%s\file_test%v.jsonl`, dpath, flag)
+	//fmt.Println(path)
 	if _, err := os.Stat(dpath); err == nil {
-		err := os.RemoveAll(dpath)
+		err := os.RemoveAll(path)
 		if err != nil {
 			return err
 		}
@@ -39,7 +39,7 @@ func Folder(dir string) (err error) {
 	bar := progressbar.Default(int64(len(folders)))
 	for _, folder := range folders {
 		//fmt.Println("Cleaning %s", folder.Name())
-		work, err := file.ReadAllHTML(filepath.Join(dir, folder.Name()))
+		work, err := file.ReadAllHTML(filepath.Join(dir, folder.Name()), flag)
 		if err != nil {
 			return fmt.Errorf("ReadAllHTML in %s error: %v", folder.Name(), err)
 		}

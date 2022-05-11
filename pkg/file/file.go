@@ -4,16 +4,18 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/Realive333/kakuyomu_cleaner/internal/works"
 )
 
-func ReadAllHTML(dir string) (work *works.Work, err error) {
+func ReadAllHTML(dir string, flag int) (work *works.Work, err error) {
 	work = &works.Work{}
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return
 	}
+
 	for _, f := range files {
 		if f.Name() == "abstract.html" {
 			err = work.GetAbstract(filepath.Join(dir, f.Name()))
@@ -23,11 +25,12 @@ func ReadAllHTML(dir string) (work *works.Work, err error) {
 		} else if f.Name() == "record.json" {
 			continue
 		} else {
-			err = work.GetContent(filepath.Join(dir, f.Name()))
+			err = work.GetContent(filepath.Join(dir, f.Name()), flag)
 			if err != nil {
 				return nil, err
 			}
 		}
+		time.Sleep(1 * time.Millisecond)
 	}
 	return
 }
